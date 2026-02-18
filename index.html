@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>보령 시작 페이지</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-base:      #0b0d11;
+      --bg-card:      #121519;
+      --bg-card2:     #171b21;
+      --border:       #252a33;
+      --border-glow:  #2e3a4e;
+      --text-primary: #e8edf4;
+      --text-secondary:#8a96a8;
+      --text-muted:   #505a68;
+      --accent-blue:  #3d8ef0;
+      --accent-cyan:  #22d3c8;
+      --accent-amber: #f5a623;
+      --accent-rose:  #f05b6e;
+      --accent-green: #4cde97;
+      --accent-purple:#a78bfa;
+      --glow-blue:    rgba(61,142,240,0.18);
+      --glow-cyan:    rgba(34,211,200,0.14);
+    }
+
+```
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; opacity: 0.5;
+}
+
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 { width: 500px; height: 500px; top: -200px; left: -150px; background: radial-gradient(circle, rgba(61,142,240,0.10) 0%, transparent 70%); animation: orbFloat 14s ease-in-out infinite; }
+.orb-2 { width: 400px; height: 400px; bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(34,211,200,0.08) 0%, transparent 70%); animation: orbFloat 18s ease-in-out infinite reverse; }
+@keyframes orbFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
+
+.page {
+  position: relative; z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  animation: fadeDown .7s ease both;
+}
+.header-left { display: flex; flex-direction: column; gap: 2px; }
+.header-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.7rem;
+  letter-spacing: -0.5px;
+  background: linear-gradient(120deg, var(--accent-cyan), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.header-sub {
+  font-size: .78rem;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 1px;
+}
+.clock-block { text-align: right; }
+#clock-time {
+  font-family: 'Space Mono', monospace;
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+#clock-date {
+  font-size: .82rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-blue) 0%, var(--border) 60%, transparent 100%);
+  margin-bottom: 36px;
+  animation: fadeDown .9s ease both;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+}
+.left-col { display: flex; flex-direction: column; gap: 20px; }
+.right-col { display: flex; flex-direction: column; gap: 20px; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 26px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .3s, box-shadow .3s;
+}
+.card:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 0 30px rgba(61,142,240,0.08);
+}
+.card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+.card-label {
+  font-size: .68rem;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-label::before {
+  content: ''; display: inline-block;
+  width: 20px; height: 1px;
+  background: currentColor;
+}
+
+.weather-card {
+  background: linear-gradient(145deg, #0e1520 0%, #111922 100%);
+  border-color: #1e2d42;
+  animation: fadeUp .8s ease .1s both;
+}
+.weather-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top left, var(--glow-blue), transparent 65%);
+  pointer-events: none;
+}
+.weather-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.weather-icon-wrap { font-size: 5rem; line-height: 1; filter: drop-shadow(0 0 20px rgba(34,211,200,0.4)); }
+.weather-temp-big {
+  font-family: 'DM Serif Display', serif;
+  font-size: 4.5rem;
+  line-height: 1;
+  background: linear-gradient(135deg, #e8edf4, #8a96a8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.weather-temp-unit { font-size: 1.8rem; vertical-align: super; }
+.weather-desc { font-size: .9rem; color: var(--text-secondary); margin-top: 4px; }
+.weather-location { font-size: .82rem; color: var(--accent-cyan); font-weight: 500; }
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+.weather-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.weather-item-icon { font-size: 1.3rem; }
+.weather-item-label { font-size: .7rem; color: var(--text-muted); }
+.weather-item-val { font-size: .95rem; font-weight: 500; }
+
+.weekly-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.day-chip {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 10px 6px;
+  text-align: center;
+  transition: background .2s;
+}
+.day-chip:hover { background: rgba(61,142,240,0.08); }
+.day-chip.today { border-color: var(--accent-blue); background: rgba(61,142,240,0.08); }
+.day-chip-name { font-size: .68rem; color: var(--text-muted); margin-bottom: 4px; }
+.day-chip-icon { font-size: 1.1rem; }
+.day-chip-temp { font-size: .78rem; font-weight: 500; margin-top: 2px; }
+
+.stocks-card { animation: fadeUp .8s ease .2s both; }
+.stock-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.stock-row:last-child { border-bottom: none; }
+.stock-name { font-size: .88rem; font-weight: 500; }
+.stock-val { font-family: 'Space Mono', monospace; font-size: .88rem; }
+.stock-chg { font-size: .78rem; padding: 2px 8px; border-radius: 6px; font-family: 'Space Mono', monospace; }
+.up   { color: var(--accent-green); background: rgba(76,222,151,0.10); }
+.down { color: var(--accent-rose);  background: rgba(240,91,110,0.10); }
+
+.news-section { animation: fadeUp .8s ease .15s both; }
+.refresh-btn {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: .78rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+.refresh-btn:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  background: rgba(61,142,240,0.05);
+}
+.refresh-btn:active {
+  transform: scale(0.95);
+}
+.refresh-btn.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.refresh-icon {
+  display: inline-block;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.refresh-btn.loading .refresh-icon {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.news-tabs {
+  display: flex; gap: 6px;
+  margin-bottom: 18px;
+}
+.tab-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: .78rem; font-family: 'Noto Sans KR', sans-serif;
+  padding: 6px 14px; border-radius: 20px; cursor: pointer;
+  transition: all .2s;
+  font-weight: 500;
+}
+.tab-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+.tab-btn.active {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: #fff;
+}
+
+.news-list { display: flex; flex-direction: column; gap: 12px; }
+.news-item {
+  display: flex; gap: 14px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: border-color .25s, transform .2s;
+  text-decoration: none; color: inherit;
+}
+.news-item:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-1px);
+}
+.news-num {
+  font-family: 'Space Mono', monospace;
+  font-size: .72rem;
+  color: var(--text-muted);
+  min-width: 20px;
+  padding-top: 2px;
+}
+.news-body { flex: 1; }
+.news-category {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.cat-domestic  { background: rgba(61,142,240,0.15);  color: var(--accent-blue); }
+.cat-global    { background: rgba(167,139,250,0.15); color: var(--accent-purple); }
+.cat-economy   { background: rgba(245,166,35,0.15);  color: var(--accent-amber); }
+.cat-tech      { background: rgba(34,211,200,0.15);  color: var(--accent-cyan); }
+
+.news-title {
+  font-size: .92rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.news-meta { font-size: .74rem; color: var(--text-muted); }
+.news-arrow { color: var(--text-muted); font-size: 1rem; align-self: center; transition: color .2s; }
+.news-item:hover .news-arrow { color: var(--accent-blue); }
+
+.news-panel { display: none; }
+.news-panel.active { display: flex; flex-direction: column; gap: 12px; }
+
+.links-card { animation: fadeUp .8s ease .3s both; }
+.links-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.link-chip {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; padding: 14px 8px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none; color: var(--text-secondary);
+  font-size: .78rem; text-align: center;
+  transition: all .22s;
+}
+.link-chip:hover {
+  border-color: var(--border-glow);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+.link-chip-icon { font-size: 1.4rem; }
+
+.loading { opacity: 0.5; text-align: center; padding: 20px; }
+.error-msg { color: var(--accent-rose); font-size: .85rem; margin-top: 8px; text-align: center; }
+
+@keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:none} }
+
+@media (max-width: 860px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .weather-temp-big { font-size: 3.4rem; }
+}
+@media (max-width: 540px) {
+  .page { padding: 20px 14px 40px; }
+  #clock-time { font-size: 1.8rem; }
+  .header-logo { font-size: 1.3rem; }
+  .weekly-row { display: none; }
+}
+```
+
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="page">
+
+```
+<header class="header">
+  <div class="header-left">
+    <div class="header-logo">보령 대시보드</div>
+    <div class="header-sub">BORYEONG · 충청남도</div>
+  </div>
+  <div class="clock-block">
+    <div id="clock-time">--:--</div>
+    <div id="clock-date">로딩 중...</div>
+  </div>
+</header>
+<div class="divider"></div>
+
+<div class="main-grid">
+
+  <div class="left-col">
+
+    <!-- WEATHER CARD -->
+    <div class="card weather-card">
+      <div class="card-label">날씨 · 보령시</div>
+      <div class="weather-main">
+        <div>
+          <div class="weather-icon-wrap" id="weather-icon">🌥️</div>
+          <div class="weather-desc" id="weather-desc">로딩 중...</div>
+          <div class="weather-location">📍 충청남도 보령시</div>
+        </div>
+        <div style="text-align:right">
+          <div class="weather-temp-big"><span id="weather-temp">--</span><span class="weather-temp-unit">°C</span></div>
+          <div class="weather-desc" style="margin-top:4px">체감 <span id="weather-feels">--</span>°C</div>
+        </div>
+      </div>
+
+      <div class="weather-grid">
+        <div class="weather-item">
+          <div class="weather-item-icon">💧</div>
+          <div>
+            <div class="weather-item-label">습도</div>
+            <div class="weather-item-val" id="weather-humidity">--%</div>
+          </div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon">💨</div>
+          <div>
+            <div class="weather-item-label">바람</div>
+            <div class="weather-item-val" id="weather-wind">-- m/s</div>
+          </div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon">🌅</div>
+          <div>
+            <div class="weather-item-label">일출</div>
+            <div class="weather-item-val" id="weather-sunrise">--:--</div>
+          </div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon">🌇</div>
+          <div>
+            <div class="weather-item-label">일몰</div>
+            <div class="weather-item-val" id="weather-sunset">--:--</div>
+          </div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon">🌡️</div>
+          <div>
+            <div class="weather-item-label">기압</div>
+            <div class="weather-item-val" id="weather-pressure">-- hPa</div>
+          </div>
+        </div>
+        <div class="weather-item">
+          <div class="weather-item-icon">👁️</div>
+          <div>
+            <div class="weather-item-label">가시거리</div>
+            <div class="weather-item-val" id="weather-visibility">-- km</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weekly-row" id="forecast-container">
+        <!-- 5일 예보 -->
+      </div>
+    </div>
+
+    <!-- STOCKS CARD -->
+    <div class="card stocks-card">
+      <div class="card-label">시장 지수</div>
+      <div class="stock-row">
+        <div>
+          <div class="stock-name">KOSPI</div>
+          <div style="font-size:.74rem;color:var(--text-muted)">코스피</div>
+        </div>
+        <div style="text-align:right">
+          <div class="stock-val">2,613.80</div>
+          <div class="stock-chg down">▼ 8.40 (-0.32%)</div>
+        </div>
+      </div>
+      <div class="stock-row">
+        <div>
+          <div class="stock-name">KOSDAQ</div>
+          <div style="font-size:.74rem;color:var(--text-muted)">코스닥</div>
+        </div>
+        <div style="text-align:right">
+          <div class="stock-val">758.24</div>
+          <div class="stock-chg up">▲ 3.12 (+0.41%)</div>
+        </div>
+      </div>
+      <div class="stock-row">
+        <div>
+          <div class="stock-name">USD/KRW</div>
+          <div style="font-size:.74rem;color:var(--text-muted)">원달러 환율</div>
+        </div>
+        <div style="text-align:right">
+          <div class="stock-val">1,440.5</div>
+          <div class="stock-chg down">▼ 2.30 (-0.16%)</div>
+        </div>
+      </div>
+      <div class="stock-row">
+        <div>
+          <div class="stock-name">Gold</div>
+          <div style="font-size:.74rem;color:var(--text-muted)">금 (온스)</div>
+        </div>
+        <div style="text-align:right">
+          <div class="stock-val">$5,012</div>
+          <div class="stock-chg down">▼ 33.90 (-0.65%)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="card links-card">
+      <div class="card-label">빠른 링크</div>
+      <div class="links-grid">
+        <a class="link-chip" href="https://www.naver.com" target="_blank">
+          <div class="link-chip-icon">🔍</div>
+          <span>네이버</span>
+        </a>
+        <a class="link-chip" href="https://weather.naver.com" target="_blank">
+          <div class="link-chip-icon">🌦️</div>
+          <span>날씨</span>
+        </a>
+        <a class="link-chip" href="https://finance.naver.com" target="_blank">
+          <div class="link-chip-icon">📈</div>
+          <span>주식</span>
+        </a>
+        <a class="link-chip" href="https://news.naver.com" target="_blank">
+          <div class="link-chip-icon">📰</div>
+          <span>뉴스</span>
+        </a>
+        <a class="link-chip" href="https://map.naver.com" target="_blank">
+          <div class="link-chip-icon">🗺️</div>
+          <span>지도</span>
+        </a>
+        <a class="link-chip" href="https://www.youtube.com" target="_blank">
+          <div class="link-chip-icon">▶️</div>
+          <span>유튜브</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="right-col">
+    <div class="card news-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div class="card-label" style="margin-bottom: 0;">오늘의 뉴스 · <span id="news-date">--</span></div>
+        <button class="refresh-btn" onclick="refreshNews()" id="refresh-btn">
+          <span class="refresh-icon">↻</span> 새로고침
+        </button>
+      </div>
+      <div class="news-tabs">
+        <button class="tab-btn active" onclick="switchTab('domestic',this)">🇰🇷 국내</button>
+        <button class="tab-btn" onclick="switchTab('global',this)">🌍 국제</button>
+        <button class="tab-btn" onclick="switchTab('economy',this)">💹 경제</button>
+        <button class="tab-btn" onclick="switchTab('tech',this)">⚡ IT/기술</button>
+      </div>
+
+      <div id="panel-domestic" class="news-panel active">
+        <div class="loading">뉴스를 불러오는 중...</div>
+      </div>
+      <div id="panel-global" class="news-panel">
+        <div class="loading">뉴스를 불러오는 중...</div>
+      </div>
+      <div id="panel-economy" class="news-panel">
+        <div class="loading">뉴스를 불러오는 중...</div>
+      </div>
+      <div id="panel-tech" class="news-panel">
+        <div class="loading">뉴스를 불러오는 중...</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════════════════════
+    // CONFIG
+    // ════════════════════════════════════════════════════════════
+    const WEATHER_API_KEY = '20d63d2863becb510e6d6177a407f45f';
+    const BORYEONG_LAT = 36.3436;
+    const BORYEONG_LON = 126.6086;
+
+    // ════════════════════════════════════════════════════════════
+    // CLOCK
+    // ════════════════════════════════════════════════════════════
+    function updateClock() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2,'0');
+      const mm = String(now.getMinutes()).padStart(2,'0');
+      const ss = String(now.getSeconds()).padStart(2,'0');
+      document.getElementById('clock-time').textContent = `${hh}:${mm}:${ss}`;
+      
+      const days = ['일','월','화','수','목','금','토'];
+      const y = now.getFullYear(), mo = now.getMonth()+1, d = now.getDate();
+      document.getElementById('clock-date').textContent =
+        `${y}년 ${mo}월 ${d}일 ${days[now.getDay()]}요일`;
+      
+      document.getElementById('news-date').textContent = `${y}.${String(mo).padStart(2,'0')}.${String(d).padStart(2,'0')}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ════════════════════════════════════════════════════════════
+    // WEATHER
+    // ════════════════════════════════════════════════════════════
+    function getWeatherIcon(code) {
+      const iconMap = {
+        '01d': '☀️', '01n': '🌙',
+        '02d': '⛅', '02n': '☁️',
+        '03d': '☁️', '03n': '☁️',
+        '04d': '☁️', '04n': '☁️',
+        '09d': '🌧️', '09n': '🌧️',
+        '10d': '🌦️', '10n': '🌧️',
+        '11d': '⛈️', '11n': '⛈️',
+        '13d': '❄️', '13n': '❄️',
+        '50d': '🌫️', '50n': '🌫️'
+      };
+      return iconMap[code] || '🌥️';
+    }
+
+    function getWeatherDescKR(desc) {
+      const map = {
+        'clear sky': '맑음',
+        'few clouds': '구름 조금',
+        'scattered clouds': '구름 많음',
+        'broken clouds': '흐림',
+        'overcast clouds': '매우 흐림',
+        'shower rain': '소나기',
+        'rain': '비',
+        'light rain': '약한 비',
+        'moderate rain': '보통 비',
+        'heavy rain': '강한 비',
+        'thunderstorm': '뇌우',
+        'snow': '눈',
+        'mist': '안개',
+        'fog': '안개',
+        'haze': '실안개'
+      };
+      return map[desc.toLowerCase()] || desc;
+    }
+
+    function getWindDirection(deg) {
+      const dirs = ['북','북동','동','남동','남','남서','서','북서'];
+      return dirs[Math.round(deg / 45) % 8];
+    }
+
+    async function loadWeather() {
+      try {
+        // Use CORS proxy
+        const corsProxy = 'https://corsproxy.io/?';
+        const currentUrl = `${corsProxy}${encodeURIComponent(`https://api.openweathermap.org/data/2.5/weather?lat=${BORYEONG_LAT}&lon=${BORYEONG_LON}&units=metric&appid=${WEATHER_API_KEY}`)}`;
+        
+        const currentRes = await fetch(currentUrl);
+        const current = await currentRes.json();
+
+        if (current.cod && current.cod !== 200) {
+          throw new Error(current.message || '날씨 데이터 로드 실패');
+        }
+
+        document.getElementById('weather-temp').textContent = Math.round(current.main.temp);
+        document.getElementById('weather-feels').textContent = Math.round(current.main.feels_like);
+        document.getElementById('weather-desc').textContent = getWeatherDescKR(current.weather[0].description);
+        document.getElementById('weather-icon').textContent = getWeatherIcon(current.weather[0].icon);
+        document.getElementById('weather-humidity').textContent = current.main.humidity + '%';
+        document.getElementById('weather-wind').textContent = getWindDirection(current.wind.deg) + ' ' + Math.round(current.wind.speed) + 'm/s';
+        document.getElementById('weather-pressure').textContent = current.main.pressure + ' hPa';
+        document.getElementById('weather-visibility').textContent = (current.visibility / 1000).toFixed(1) + 'km';
+
+        const sunrise = new Date(current.sys.sunrise * 1000);
+        const sunset = new Date(current.sys.sunset * 1000);
+        document.getElementById('weather-sunrise').textContent = 
+          String(sunrise.getHours()).padStart(2,'0') + ':' + String(sunrise.getMinutes()).padStart(2,'0');
+        document.getElementById('weather-sunset').textContent = 
+          String(sunset.getHours()).padStart(2,'0') + ':' + String(sunset.getMinutes()).padStart(2,'0');
+
+        // 5-day forecast
+        const forecastUrl = `${corsProxy}${encodeURIComponent(`https://api.openweathermap.org/data/2.5/forecast?lat=${BORYEONG_LAT}&lon=${BORYEONG_LON}&units=metric&appid=${WEATHER_API_KEY}`)}`;
+        const forecastRes = await fetch(forecastUrl);
+        const forecast = await forecastRes.json();
+
+        if (forecast.cod && forecast.cod !== '200') {
+          throw new Error('예보 데이터 로드 실패');
+        }
+
+        const dailyData = [];
+        const seenDates = new Set();
+        
+        forecast.list.forEach(item => {
+          const date = new Date(item.dt * 1000);
+          const dateStr = date.toDateString();
+          const hour = date.getHours();
+          
+          if (hour === 12 && !seenDates.has(dateStr)) {
+            seenDates.add(dateStr);
+            dailyData.push(item);
+          }
+        });
+
+        const days = ['일','월','화','수','목','금','토'];
+        const today = new Date().getDate();
+        
+        let forecastHTML = '';
+        dailyData.slice(0, 5).forEach((day) => {
+          const date = new Date(day.dt * 1000);
+          const isToday = date.getDate() === today;
+          const dayName = isToday ? '오늘' : days[date.getDay()];
+          
+          forecastHTML += `
+            <div class="day-chip ${isToday ? 'today' : ''}">
+              <div class="day-chip-name">${dayName}</div>
+              <div class="day-chip-icon">${getWeatherIcon(day.weather[0].icon)}</div>
+              <div class="day-chip-temp">${Math.round(day.main.temp)}°</div>
+            </div>
+          `;
+        });
+        
+        document.getElementById('forecast-container').innerHTML = forecastHTML;
+
+      } catch (error) {
+        console.error('날씨 로드 오류:', error);
+        document.getElementById('weather-desc').textContent = 'API 키 활성화 대기 중 (1~2시간 소요)';
+        document.getElementById('weather-temp').textContent = '--';
+        document.getElementById('weather-feels').textContent = '--';
+      }
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // NEWS - Live RSS Feed with refresh button
+    // ════════════════════════════════════════════════════════════
+    const NEWS_FEEDS = {
+      domestic: 'https://news.google.com/rss/search?q=한국+when:1d&hl=ko&gl=KR&ceid=KR:ko',
+      global: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtdHZHZ0pMVWlnQVAB?hl=ko&gl=KR&ceid=KR%3Ako',
+      economy: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0FtdHZHZ0pMVWlnQVAB?hl=ko&gl=KR&ceid=KR%3Ako',
+      tech: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtdHZHZ0pMVWlnQVAB?hl=ko&gl=KR&ceid=KR%3Ako'
+    };
+
+    const CATEGORY_NAMES = {
+      domestic: '국내',
+      global: '국제',
+      economy: '경제',
+      tech: 'IT/기술'
+    };
+
+    async function loadNews(category) {
+      const panel = document.getElementById(`panel-${category}`);
+      
+      try {
+        panel.innerHTML = '<div class="loading">뉴스를 불러오는 중...</div>';
+        
+        const rssUrl = NEWS_FEEDS[category];
+        const corsProxy = 'https://api.allorigins.win/raw?url=';
+        const proxyUrl = corsProxy + encodeURIComponent(rssUrl);
+        
+        const res = await fetch(proxyUrl);
+        const xmlText = await res.text();
+        
+        // Parse RSS XML
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+        const items = xmlDoc.querySelectorAll('item');
+        
+        if (items.length === 0) throw new Error('뉴스를 찾을 수 없습니다');
+
+        let newsHTML = '';
+        const maxItems = Math.min(items.length, 8);
+        
+        for (let i = 0; i < maxItems; i++) {
+          const item = items[i];
+          let title = item.querySelector('title')?.textContent || '';
+          const link = item.querySelector('link')?.textContent || '#';
+          const pubDate = item.querySelector('pubDate')?.textContent || '';
+          
+          // Clean title (remove source)
+          const lastDash = title.lastIndexOf(' - ');
+          if (lastDash > 0) {
+            title = title.substring(0, lastDash);
+          }
+          
+          // Calculate time ago
+          let timeAgo = '최근';
+          if (pubDate) {
+            const date = new Date(pubDate);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            
+            if (diffHours < 1) timeAgo = '방금 전';
+            else if (diffHours < 24) timeAgo = `${diffHours}시간 전`;
+            else timeAgo = `${Math.floor(diffHours / 24)}일 전`;
+          }
+
+          newsHTML += `
+            <a class="news-item" href="${link}" target="_blank">
+              <div class="news-num">${String(i + 1).padStart(2, '0')}</div>
+              <div class="news-body">
+                <div class="news-category cat-${category}">${CATEGORY_NAMES[category]}</div>
+                <div class="news-title">${title}</div>
+                <div class="news-meta">${timeAgo}</div>
+              </div>
+              <div class="news-arrow">→</div>
+            </a>
+          `;
+        }
+
+        panel.innerHTML = newsHTML;
+
+      } catch (error) {
+        console.error(`${category} 뉴스 로드 오류:`, error);
+        panel.innerHTML = `<div class="error-msg">뉴스를 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.</div>`;
+      }
+    }
+
+    async function loadAllNews() {
+      await Promise.all([
+        loadNews('domestic'),
+        loadNews('global'),
+        loadNews('economy'),
+        loadNews('tech')
+      ]);
+    }
+
+    async function refreshNews() {
+      const btn = document.getElementById('refresh-btn');
+      btn.classList.add('loading');
+      btn.innerHTML = '<span class="refresh-icon">↻</span> 새로고침 중...';
+      
+      try {
+        await loadAllNews();
+        btn.innerHTML = '<span class="refresh-icon">✓</span> 완료!';
+        setTimeout(() => {
+          btn.innerHTML = '<span class="refresh-icon">↻</span> 새로고침';
+          btn.classList.remove('loading');
+        }, 2000);
+      } catch (error) {
+        btn.innerHTML = '<span class="refresh-icon">✗</span> 실패';
+        setTimeout(() => {
+          btn.innerHTML = '<span class="refresh-icon">↻</span> 새로고침';
+          btn.classList.remove('loading');
+        }, 2000);
+      }
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // TAB SWITCH
+    // ════════════════════════════════════════════════════════════
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.news-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-'+tab).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // INIT
+    // ════════════════════════════════════════════════════════════
+    window.addEventListener('DOMContentLoaded', () => {
+      loadWeather();
+      loadAllNews();
+      
+      // Refresh weather every 10 minutes
+      setInterval(loadWeather, 10 * 60 * 1000);
+    });
+  </script>
+
+</body>
+</html>
